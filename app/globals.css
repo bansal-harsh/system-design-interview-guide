@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.985 0.004 258);
+  --foreground: oklch(0.23 0.02 258);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.23 0.02 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.23 0.02 258);
+  --primary: oklch(0.58 0.17 255);
+  --primary-foreground: oklch(0.99 0.005 258);
+  --secondary: oklch(0.95 0.01 258);
+  --secondary-foreground: oklch(0.3 0.02 258);
+  --muted: oklch(0.96 0.006 258);
+  --muted-foreground: oklch(0.52 0.02 258);
+  --accent: oklch(0.94 0.03 220);
+  --accent-foreground: oklch(0.28 0.02 258);
+  --destructive: oklch(0.63 0.23 25);
+  --border: oklch(0.91 0.01 258);
+  --input: oklch(0.91 0.01 258);
+  --ring: oklch(0.58 0.17 255 / 0.35);
+  --radius: 1rem;
+  --sidebar: oklch(0.99 0.003 258 / 0.82);
+  --sidebar-foreground: oklch(0.24 0.02 258);
+  --sidebar-border: oklch(0.91 0.01 258 / 0.85);
+  --chart-1: oklch(0.65 0.16 250);
+  --chart-2: oklch(0.72 0.17 170);
+  --chart-3: oklch(0.74 0.14 85);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 258);
+  --foreground: oklch(0.96 0.004 258);
+  --card: oklch(0.2 0.02 258 / 0.85);
+  --card-foreground: oklch(0.96 0.004 258);
+  --popover: oklch(0.19 0.02 258);
+  --popover-foreground: oklch(0.96 0.004 258);
+  --primary: oklch(0.73 0.16 252);
+  --primary-foreground: oklch(0.17 0.02 258);
+  --secondary: oklch(0.26 0.02 258);
+  --secondary-foreground: oklch(0.94 0.004 258);
+  --muted: oklch(0.24 0.015 258);
+  --muted-foreground: oklch(0.72 0.015 258);
+  --accent: oklch(0.28 0.03 225);
+  --accent-foreground: oklch(0.96 0.004 258);
+  --destructive: oklch(0.7 0.21 25);
+  --border: oklch(0.31 0.015 258 / 0.75);
+  --input: oklch(0.31 0.015 258 / 0.75);
+  --ring: oklch(0.73 0.16 252 / 0.45);
+  --sidebar: oklch(0.17 0.018 258 / 0.88);
+  --sidebar-foreground: oklch(0.96 0.004 258);
+  --sidebar-border: oklch(0.31 0.015 258 / 0.75);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --radius-sm: calc(var(--radius) - 0.5rem);
+  --radius-md: calc(var(--radius) - 0.25rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background-image:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 22%, transparent) 0, transparent 36%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--chart-2) 18%, transparent) 0, transparent 32%),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 92%, white) 0%, var(--background) 100%);
+  min-height: 100vh;
+}
+
+a,
+button {
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.prose-docs {
+  @apply max-w-none text-base leading-7 text-foreground/90;
+}
+
+.prose-docs h2,
+.prose-docs h3,
+.prose-docs h4 {
+  scroll-margin-top: 6rem;
+  @apply font-semibold tracking-tight text-foreground;
+}
+
+.prose-docs h2 {
+  @apply mt-14 text-2xl;
+}
+
+.prose-docs h3 {
+  @apply mt-10 text-xl;
+}
+
+.prose-docs p,
+.prose-docs ul,
+.prose-docs ol {
+  @apply mt-5 text-foreground/80;
+}
+
+.prose-docs ul,
+.prose-docs ol {
+  @apply space-y-3 pl-6;
+}
+
+.prose-docs li {
+  @apply marker:text-primary;
+}
+
+.prose-docs a {
+  @apply text-primary underline decoration-primary/35 underline-offset-4;
+}
+
+.prose-docs code {
+  @apply rounded-md bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground;
+}
+
+.font-sans {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+}
+
+.prose-docs pre {
+  @apply mt-6 overflow-x-auto rounded-2xl border bg-zinc-950 px-5 py-4 text-sm text-zinc-50;
+}
+
+.prose-docs blockquote {
+  @apply mt-6 border-l-4 border-primary/45 pl-5 italic text-foreground/70;
+}
+
+.glass-panel {
+  background: color-mix(in srgb, var(--card) 74%, transparent);
+  backdrop-filter: blur(18px);
+}

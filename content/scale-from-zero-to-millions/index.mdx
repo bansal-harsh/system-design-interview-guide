@@ -1,0 +1,84 @@
+## Why this journey matters
+
+Most system design interviews are easier when you can tell a clear story: start simple, find the bottleneck, and introduce the next component only when the current system breaks down. This module walks through that exact mental model.
+
+## Stage 1: Single server
+
+At the beginning, a single server handles the web app, the API, and the database connection. This is cheap, fast to ship, and perfect for validating whether anyone cares.
+
+- One application instance handles all traffic.
+- The database often lives on the same machine or on a single managed instance.
+- Operational complexity stays low, but availability risk is high.
+
+<DiagramBlock
+  title="Single-server baseline"
+  caption="Everything runs through one box, which keeps the mental model simple but creates a single point of failure."
+  nodes={["Clients", "App Server", "Primary Database"]}
+/>
+
+## Stage 2: Load balancing
+
+As traffic grows, CPU spikes and request latency becomes inconsistent. A load balancer lets multiple application instances share traffic.
+
+- Horizontal scaling improves throughput.
+- Health checks remove bad instances from rotation.
+- Session storage must move out of local memory if requests can hit any instance.
+
+<InterviewTip title="Explain the trigger, not just the tool">
+In interviews, do not say "add a load balancer" as a memorized step. Say which problem forces the change: higher concurrency, uneven request distribution, or the need to remove a single app-server failure point.
+</InterviewTip>
+
+## Stage 3: Caching
+
+Databases usually become the next hotspot. Read-heavy systems benefit from caching because not every request needs a fresh trip to durable storage.
+
+- Application caches reduce database load.
+- CDN caches offload static assets close to users.
+- Cache invalidation introduces consistency trade-offs.
+
+<DiagramBlock
+  title="Caching layer"
+  caption="Cache hot paths aggressively, but keep invalidation rules simple and observable."
+  nodes={["Clients", "CDN", "Load Balancer", "App Servers", "Redis Cache", "Primary Database"]}
+/>
+
+## Stage 4: Database scaling
+
+Eventually the primary database hits write limits, storage limits, or replication lag challenges. At that point, the design conversation shifts from "where do requests go?" to "how do we partition state safely?"
+
+### Replication
+
+Read replicas improve read capacity and help isolate analytical workloads from transactional traffic. The trade-off is replica lag.
+
+### Sharding
+
+Sharding splits data across multiple databases. This expands write throughput, but the system gets harder to reason about because joins, rebalancing, and hotspot management become distributed problems.
+
+<RealWorldExample title="Why companies move slowly here">
+Teams often delay sharding as long as possible because it affects query models, migration workflows, debugging, and incident response. Strong caching plus thoughtful data access patterns can buy a surprising amount of time before you need it.
+</RealWorldExample>
+
+## Stage 5: Service boundaries
+
+When a monolith grows, separate domains start moving at different speeds. This is where teams consider background workers, event pipelines, and eventually microservices.
+
+- Split along domain boundaries, not organizational hype.
+- Favor well-owned services over many tiny services.
+- Expect observability, CI/CD, and local development complexity to increase.
+
+## Stage 6: Global scale and resilience
+
+At mature scale, geography matters. You start optimizing for latency, disaster recovery, multi-region failover, and fault isolation.
+
+- Use CDN and edge caching for user-facing latency.
+- Replicate data across regions based on consistency requirements.
+- Design graceful degradation paths so partial outages do not become full product outages.
+
+## Checklist for interview answers
+
+- Start with a simple baseline.
+- Name the bottleneck that breaks the baseline.
+- Introduce one architectural change at a time.
+- Call out the new trade-off created by each change.
+- End with observability, cost, and operational complexity.
+

@@ -1,0 +1,17 @@
+{
+  "id": "distributed-systems-foundations",
+  "title": "Distributed Systems Foundations",
+  "slug": "distributed-systems-foundations",
+  "description": "Build intuition for replication, consistency, partitions, coordination, and failure handling before jumping into advanced architectures.",
+  "order": 4,
+  "category": "Distributed Systems",
+  "level": "Advanced",
+  "readTime": "20 min read",
+  "tags": ["Consistency", "Replication", "Fault tolerance"],
+  "outcomes": [
+    "Explain why distributed systems are fundamentally harder than single-node systems",
+    "Compare consistency and availability trade-offs in practical terms",
+    "Recognize the operational cost of coordination-heavy designs"
+  ]
+}
+

@@ -1,0 +1,35 @@
+## Why estimation matters
+
+Strong system design answers are quantitative enough to feel real. Estimation helps you reject architectures that obviously do not fit the workload.
+
+## A simple flow
+
+1. Estimate daily active users.
+2. Convert daily behavior into requests per second.
+3. Estimate read-to-write ratios.
+4. Calculate storage growth over time.
+5. Add a safety margin.
+
+## Example: short-link service
+
+Suppose the product receives **10 million new links per month** and each redirect is read **100 times** on average.
+
+- New writes per second stay modest.
+- Redirect reads dominate traffic.
+- A cache becomes valuable much earlier than a sharded write path.
+
+<InterviewTip title="Narrate assumptions clearly">
+Interviewers care less about exact numbers than whether your assumptions are reasonable, explicit, and internally consistent.
+</InterviewTip>
+
+## Common anchors to memorize
+
+- `1 day = 86,400 seconds`
+- `1 KB = 10^3 bytes` for quick approximation
+- `1 million / day` is about `12 requests / second`
+- Traffic peaks are often `2x` to `5x` the average
+
+## What this unlocks
+
+Once you can size the system, conversations about caching, replication, rate limiting, queues, and storage all become much more concrete.
+

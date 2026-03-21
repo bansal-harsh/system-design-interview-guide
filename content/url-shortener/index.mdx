@@ -1,0 +1,37 @@
+## Functional requirements
+
+- Create a short URL for a long URL.
+- Redirect short URLs quickly.
+- Optionally support expiration, analytics, and custom aliases.
+
+## Core design choices
+
+The system usually splits into a **write path** and a **redirect path**.
+
+- The write path validates and stores new mappings.
+- The redirect path is latency-sensitive and should be aggressively cached.
+
+<DiagramBlock
+  title="URL shortener request flow"
+  caption="The redirect path should be optimized separately from the link-creation path because the read volume is usually much higher."
+  nodes={["Client", "API Gateway", "Link Service", "ID Generator", "Cache", "Metadata Store"]}
+/>
+
+## Key trade-offs
+
+### ID generation
+
+Counter-based IDs are simple and predictable. Hash-based IDs reduce predictability but can complicate deduplication logic.
+
+### Storage
+
+A key-value model works well because most lookups are direct by short code. Analytical data can be pushed into a separate event pipeline.
+
+### Abuse prevention
+
+Short-link platforms attract spam and phishing attempts. Rate limits, domain safety checks, and abuse review tools matter in real systems.
+
+<RealWorldExample title="Why redirect latency dominates">
+Users feel redirect slowness immediately, especially when short links are embedded in social flows or mobile onboarding. That is why teams usually invest in edge caching early for this type of service.
+</RealWorldExample>
+

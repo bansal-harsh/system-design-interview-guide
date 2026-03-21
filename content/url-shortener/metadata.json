@@ -1,0 +1,17 @@
+{
+  "id": "url-shortener",
+  "title": "Design a URL Shortener",
+  "slug": "url-shortener",
+  "description": "Use a classic design problem to connect API design, capacity planning, storage models, caching, and abuse prevention.",
+  "order": 3,
+  "category": "Design Problem",
+  "level": "Intermediate",
+  "readTime": "16 min read",
+  "tags": ["Case study", "Caching", "Data model"],
+  "outcomes": [
+    "Break a design problem into APIs, data, and scaling concerns",
+    "Explain ID generation strategies and collision risk",
+    "Cover read-heavy optimization and operational safeguards"
+  ]
+}
+

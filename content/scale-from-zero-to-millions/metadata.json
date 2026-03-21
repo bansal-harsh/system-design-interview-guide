@@ -1,0 +1,17 @@
+{
+  "id": "scale-zero-to-millions",
+  "title": "Scale From Zero to Millions",
+  "slug": "scale-from-zero-to-millions",
+  "description": "Follow the classic system design journey from a single server to globally distributed architecture, one bottleneck at a time.",
+  "order": 1,
+  "category": "Scaling Journey",
+  "level": "Beginner",
+  "readTime": "18 min read",
+  "tags": ["Foundations", "Scalability", "Architecture"],
+  "outcomes": [
+    "Recognize when each scaling layer becomes necessary",
+    "Connect bottlenecks to architectural responses",
+    "Explain the trade-offs behind common scaling patterns"
+  ]
+}
+

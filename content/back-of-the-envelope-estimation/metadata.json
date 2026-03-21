@@ -1,0 +1,17 @@
+{
+  "id": "back-of-the-envelope-estimation",
+  "title": "Back-of-the-Envelope Estimation",
+  "slug": "back-of-the-envelope-estimation",
+  "description": "Estimate traffic, storage, bandwidth, and machine counts quickly so architectural choices feel grounded instead of hand-wavy.",
+  "order": 2,
+  "category": "Sizing",
+  "level": "Beginner",
+  "readTime": "14 min read",
+  "tags": ["Capacity", "Estimation", "Interview math"],
+  "outcomes": [
+    "Translate product assumptions into engineering numbers",
+    "Estimate storage, QPS, and bandwidth with confidence",
+    "Use sizing assumptions to justify system choices"
+  ]
+}
+

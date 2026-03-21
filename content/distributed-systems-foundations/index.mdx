@@ -1,0 +1,29 @@
+## Why distributed systems feel different
+
+Once machines communicate over the network, partial failure becomes normal instead of exceptional. Messages can arrive late, out of order, or not at all.
+
+## Concepts to internalize
+
+### Replication
+
+Replication improves durability and availability, but you need to decide who is allowed to accept writes and how conflicts are resolved.
+
+### Consistency
+
+Strong consistency simplifies reasoning for some products, while eventual consistency improves availability and latency in others. The right answer depends on the user promise.
+
+### Partition tolerance
+
+Real networks partition. Production systems must define how they behave when communication between nodes becomes unreliable.
+
+<InterviewTip title="Tie theory back to product behavior">
+Instead of reciting CAP theorem terminology, describe what users experience during failures. Can they still read? Can they write? Will they see stale data? That framing lands better in interviews.
+</InterviewTip>
+
+## Practical advice
+
+- Prefer simpler coordination models first.
+- Isolate failure domains.
+- Make retries idempotent.
+- Invest in observability before scale forces you to.
+

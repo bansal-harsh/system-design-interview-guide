@@ -9,14 +9,18 @@ import type { Module } from "@/lib/content/types";
 
 type ModuleCardProps = {
   module: Module;
+  completed?: boolean;
 };
 
-export function ModuleCard({ module }: ModuleCardProps) {
+export function ModuleCard({ module, completed = false }: ModuleCardProps) {
   return (
     <Card className="h-full">
       <CardHeader>
         <div className="flex items-center justify-between gap-3">
-          <Badge variant="secondary">{module.level}</Badge>
+          <div className="flex gap-2">
+            <Badge variant="secondary">{module.level}</Badge>
+            {completed ? <Badge>Completed</Badge> : null}
+          </div>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/70">
             {formatModuleIndex(module.order)}
           </span>
@@ -50,4 +54,3 @@ export function ModuleCard({ module }: ModuleCardProps) {
     </Card>
   );
 }
-

@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSessionUser } from "@/lib/auth/session";
 import { getLearningStats, getModules } from "@/lib/content/modules";
 
 const platformHighlights = [
@@ -26,7 +27,7 @@ const platformHighlights = [
 ];
 
 export default async function HomePage() {
-  const [modules, stats] = await Promise.all([getModules(), getLearningStats()]);
+  const [modules, stats, user] = await Promise.all([getModules(), getLearningStats(), getSessionUser()]);
 
   return (
     <main className="mx-auto min-h-screen max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -57,13 +58,28 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link href="/learn">
-                  Start learning
+                  {user ? "Continue learning" : "Start learning"}
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="/learn/scale-from-zero-to-millions">Open sample module</Link>
               </Button>
+              {!user ? (
+                <Button asChild variant="ghost" size="lg">
+                  <Link
+                    href={{
+                      pathname: "/auth",
+                      query: {
+                        mode: "register",
+                        next: "/learn"
+                      }
+                    }}
+                  >
+                    Create account
+                  </Link>
+                </Button>
+              ) : null}
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               <Card>
@@ -130,4 +146,3 @@ export default async function HomePage() {
     </main>
   );
 }
-

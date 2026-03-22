@@ -15,7 +15,9 @@ import { mdxComponents } from "@/components/mdx-components";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSessionUser } from "@/lib/auth/session";
 import { getAdjacentModules, getModuleBySlug, getModules } from "@/lib/content/modules";
+import { getCompletedSlugsForUser } from "@/lib/progress";
 
 type ModulePageProps = {
   params: Promise<{ slug: string }>;
@@ -47,13 +49,15 @@ export async function generateMetadata({ params }: ModulePageProps): Promise<Met
 
 export default async function ModulePage({ params }: ModulePageProps) {
   const { slug } = await params;
-  const lesson = await getModuleBySlug(slug);
+  const [lesson, user] = await Promise.all([getModuleBySlug(slug), getSessionUser()]);
 
   if (!lesson) {
     notFound();
   }
 
   const adjacent = await getAdjacentModules(slug);
+  const completedSlugs = user ? getCompletedSlugsForUser(user.id) : [];
+  const isCompleted = completedSlugs.includes(lesson.slug);
 
   return (
     <main className="mx-auto grid max-w-7xl gap-6 xl:grid-cols-[minmax(0,1fr)_280px]">
@@ -82,7 +86,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
                 <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{lesson.title}</h1>
                 <p className="mt-4 text-lg leading-8 text-muted-foreground">{lesson.description}</p>
               </div>
-              <ModuleActions slug={lesson.slug} />
+              <ModuleActions slug={lesson.slug} isAuthenticated={Boolean(user)} initialCompleted={isCompleted} />
             </div>
             <div className="flex flex-wrap gap-2">
               {lesson.tags.map((tag) => (

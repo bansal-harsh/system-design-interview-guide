@@ -6,10 +6,14 @@ import { ModuleCard } from "@/components/learn/module-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSessionUser } from "@/lib/auth/session";
 import { getModules } from "@/lib/content/modules";
+import { getCompletedSlugsForUser } from "@/lib/progress";
 
 export default async function LearnPage() {
   const modules = await getModules();
+  const user = await getSessionUser();
+  const completedSlugs = user ? getCompletedSlugsForUser(user.id) : [];
 
   return (
     <main className="mx-auto max-w-7xl">
@@ -26,7 +30,11 @@ export default async function LearnPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <CourseProgressBar slugs={modules.map((module) => module.slug)} />
+            <CourseProgressBar
+              slugs={modules.map((module) => module.slug)}
+              completedSlugs={completedSlugs}
+              user={user}
+            />
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-[1.25rem] border border-border/70 px-4 py-4">
                 <PanelLeftClose className="mb-3 size-5 text-primary" />
@@ -44,12 +52,28 @@ export default async function LearnPage() {
                 <p className="mt-1 text-sm text-muted-foreground">Ready for logins, DB content, AI assist, and interactive labs.</p>
               </div>
             </div>
-            <Button asChild size="lg">
-              <Link href={`/learn/${modules[0]?.slug ?? ""}`}>
-                Start with the first lesson
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+            {user ? (
+              <Button asChild size="lg">
+                <Link href={`/learn/${modules[0]?.slug ?? ""}`}>
+                  Start with the first lesson
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild size="lg">
+                <Link
+                  href={{
+                    pathname: "/auth",
+                    query: {
+                      mode: "register",
+                      next: "/learn"
+                    }
+                  }}
+                >
+                  Create an account to save progress
+                </Link>
+              </Button>
+            )}
           </CardContent>
         </Card>
 
@@ -75,10 +99,9 @@ export default async function LearnPage() {
 
       <section className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {modules.map((module) => (
-          <ModuleCard key={module.slug} module={module} />
+          <ModuleCard key={module.slug} module={module} completed={completedSlugs.includes(module.slug)} />
         ))}
       </section>
     </main>
   );
 }
-

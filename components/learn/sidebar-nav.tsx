@@ -2,21 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpenCheck, Menu } from "lucide-react";
+import { BookOpenCheck, CheckCircle2, Menu } from "lucide-react";
 
+import { LogoutButton } from "@/components/auth/logout-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import type { AuthUser } from "@/lib/auth/types";
 import { cn, formatModuleIndex } from "@/lib/utils";
 import type { Module } from "@/lib/content/types";
 
 type SidebarNavProps = {
   modules: Module[];
+  user: AuthUser | null;
+  completedSlugs: string[];
 };
 
-function SidebarContent({ modules }: SidebarNavProps) {
+function SidebarContent({ modules, user, completedSlugs }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -39,6 +43,38 @@ function SidebarContent({ modules }: SidebarNavProps) {
         <p className="text-sm leading-6 text-muted-foreground">
           Each module is deployable on its own and automatically discovered from the content folder.
         </p>
+        <div className="mt-4 rounded-[1.25rem] border border-sidebar-border px-4 py-4">
+          {user ? (
+            <>
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="text-xs text-muted-foreground">{user.email}</p>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <span className="text-xs text-muted-foreground">{completedSlugs.length} lessons completed</span>
+                <LogoutButton />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-sm font-medium">Guest mode</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                Sign in to store completed lessons on your account.
+              </p>
+              <Button asChild className="mt-3 w-full" size="sm">
+                <Link
+                  href={{
+                    pathname: "/auth",
+                    query: {
+                      mode: "login",
+                      next: "/learn"
+                    }
+                  }}
+                >
+                  Sign in
+                </Link>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       <ScrollArea className="flex-1 px-3 pb-4">
@@ -54,6 +90,7 @@ function SidebarContent({ modules }: SidebarNavProps) {
           </Link>
           {modules.map((module) => {
             const isActive = pathname === `/learn/${module.slug}`;
+            const isCompleted = completedSlugs.includes(module.slug);
 
             return (
               <Link
@@ -68,8 +105,9 @@ function SidebarContent({ modules }: SidebarNavProps) {
                   {formatModuleIndex(module.order)}
                 </span>
                 <div className="min-w-0">
-                  <p className={cn("truncate text-sm font-medium", isActive ? "text-foreground" : "text-foreground/80")}>
-                    {module.title}
+                  <p className="flex items-center gap-2 truncate text-sm font-medium text-foreground/90">
+                    <span className={cn("truncate", isActive ? "text-foreground" : "text-foreground/80")}>{module.title}</span>
+                    {isCompleted ? <CheckCircle2 className="size-4 shrink-0 text-primary" /> : null}
                   </p>
                   <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">{module.description}</p>
                 </div>
@@ -82,11 +120,11 @@ function SidebarContent({ modules }: SidebarNavProps) {
   );
 }
 
-export function SidebarNav({ modules }: SidebarNavProps) {
+export function SidebarNav({ modules, user, completedSlugs }: SidebarNavProps) {
   return (
     <>
       <aside className="glass-panel fixed inset-y-4 left-4 hidden w-[300px] overflow-hidden rounded-[2rem] border border-sidebar-border lg:block">
-        <SidebarContent modules={modules} />
+        <SidebarContent modules={modules} user={user} completedSlugs={completedSlugs} />
       </aside>
       <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border/70 bg-background/85 px-4 py-3 backdrop-blur lg:hidden">
         <Sheet>
@@ -96,7 +134,7 @@ export function SidebarNav({ modules }: SidebarNavProps) {
             </Button>
           </SheetTrigger>
           <SheetContent>
-            <SidebarContent modules={modules} />
+            <SidebarContent modules={modules} user={user} completedSlugs={completedSlugs} />
           </SheetContent>
         </Sheet>
         <ThemeToggle />
@@ -104,4 +142,3 @@ export function SidebarNav({ modules }: SidebarNavProps) {
     </>
   );
 }
-

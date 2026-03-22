@@ -1,6 +1,6 @@
 # System Design Learning Platform
 
-A production-ready starter for a premium system design learning experience built with Next.js App Router, Tailwind CSS, shadcn/ui-style components, MDX content, Zustand progress tracking, and `next-themes`.
+A production-ready starter for a premium system design learning experience built with Next.js App Router, Tailwind CSS, shadcn/ui-style components, MDX content, JWT auth, per-user progress tracking, and `next-themes`.
 
 ## Stack
 
@@ -8,7 +8,8 @@ A production-ready starter for a premium system design learning experience built
 - Tailwind CSS 4
 - TypeScript
 - MDX content loaded from `/content/<slug>`
-- Zustand for client-side progress persistence
+- JWT auth with `httpOnly` cookie sessions
+- SQLite-backed per-user progress tracking
 - `next-themes` for light and dark mode
 - Vercel-friendly static generation for learning modules
 
@@ -36,6 +37,21 @@ To add a new lesson:
 npm install
 npm run dev
 ```
+
+If you want a production-grade JWT secret locally, add:
+
+```bash
+JWT_SECRET=replace-this-with-a-long-random-secret
+```
+
+The app uses a local SQLite database stored at `data/platform.db`.
+
+## Authentication
+
+- `POST /api/auth/register` creates a user and sets a JWT session cookie
+- `POST /api/auth/login` signs in an existing user
+- `POST /api/auth/logout` clears the session
+- `POST /api/progress` toggles completion for the authenticated user
 
 ## Deployment
 

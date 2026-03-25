@@ -37,8 +37,7 @@ export default async function HomePage() {
             <Sparkles className="size-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold">System Design Learning Platform</p>
-            <p className="text-xs text-muted-foreground">Next.js + MDX + Vercel-ready</p>
+            <p className="text-sm font-semibold">System Design Learning Prep</p>
           </div>
         </Link>
         <ThemeToggle />

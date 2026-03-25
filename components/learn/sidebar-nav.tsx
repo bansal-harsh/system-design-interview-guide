@@ -32,7 +32,7 @@ function SidebarContent({ modules, user, completedSlugs }: SidebarNavProps) {
           </div>
           <div>
             <p className="text-sm font-semibold">System Design</p>
-            <p className="text-xs text-muted-foreground">Learning platform</p>
+            <p className="text-xs text-muted-foreground">Learning prep</p>
           </div>
         </Link>
         <ThemeToggle />
